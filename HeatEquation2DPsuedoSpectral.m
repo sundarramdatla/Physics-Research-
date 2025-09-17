@@ -1,0 +1,62 @@
+clear all
+clc
+
+Lx = 2 * pi;
+Ly = 4 * pi;
+Nx = 20;
+Ny = 40;
+G = 1;
+n = 31;
+t0 = 0;
+tf = 1;
+t = linspace(t0, tf, n);
+
+dx = Lx/Nx;
+dy = Ly/Ny;
+x = linspace(0, Lx, Nx);
+y = linspace(0, Ly, Ny);
+[Y,X] = meshgrid(y,x);
+u0 = zeros(Nx, Ny);
+u0(5:15, 10:30) = 1;
+
+u0 = u0(:);
+
+options = odeset('RelTol', 1e-6, 'AbsTol', 1e-6, 'MaxStep', .1);
+[t, u] = ode45(@(t,u) my_pde(t, u, G, Lx, Ly, Nx, Ny), t, u0, options);
+
+for i = 1:length(t)
+    u_snapshot = reshape(u(i,:), Nx, Ny);   
+    surf(X, Y, u_snapshot, 'EdgeColor', 'none');
+    xlabel('x'); ylabel('y'); zlabel('u(x,y,t)');
+    title(['Time t = ', num2str(t(i))]);
+    zlim([0 1]);
+    view(2); 
+    colorbar
+    drawnow;
+end
+
+
+
+
+function ut = my_pde(t, u, G, Lx, Ly, Nx, Ny)
+u = reshape(u, Nx, Ny);
+kx = (2*pi / Lx) * [0:(Nx/2 - 1), -(Nx/2):-1]';
+ky = (2*pi / Ly) * [0:(Ny/2)-1, -(Ny/2):-1]';
+
+ u_kxx = zeros(Nx, Ny);
+ u_jyy = zeros(Nx, Ny);
+
+for k = 1:Ny
+    u_kxx(:,k) = real(ifft(-kx .^2 .* fft(u(:,k))));
+end
+for j = 1:Nx
+    u_jyy(j,:) = real(ifft((-ky .^2)' .* fft(u(j,:))));
+end
+  dudt = G * (u_kxx + u_jyy);
+ut = dudt(:);
+
+
+
+
+end
+
