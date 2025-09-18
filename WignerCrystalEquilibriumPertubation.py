@@ -85,18 +85,24 @@ for i in range (n-1):
 
 
 time_steps = list(range(n)) 
-
 plt.figure()
-plt.plot(time_steps, [r[5, 1, i] for i in range(n)] , marker='o', linestyle='-')
+plt.plot(time_steps, [r[5, 1, i] for i in range(n)], marker='o', linestyle='-', label='Y coordinate')
 plt.ylim(-3, 3)
-plt.ylabel("Y-coordinate")
+plt.xlabel("Time steps")
+plt.ylabel("Y coordinate")
+plt.title("Stability of Y coordinate after perturbation")
 plt.grid(True)
 plt.legend()
 
 plt.figure()
-plt.ylim(-3,3)
-plt.ylabel("X-coordinate")
-plt.plot(time_steps, [r[5, 0, i] for i in range(n)] , marker='o', linestyle='-')
+plt.plot(time_steps, [r[5, 0, i] for i in range(n)], marker='o', linestyle='-', label='X coordinate')
+plt.ylim(-3, 3)
+plt.xlabel("Time steps")
+plt.ylabel("X coordinate")
+plt.title("Stability of X coordinate after perturbation")
+plt.grid(True)
+plt.legend()
+
 
 
 print(np.var(r[6,:,:]))
@@ -112,37 +118,71 @@ U_r = 1/3 * (np.var(r[6,:,:] + np.var(r[24,:,:]) + np.var(r[20,:,:])))
 
 print(U_r)
 
+
+# r[0,:,0] = [ -.15321632, 0.81846565 ]
+# r[1,:,0] = [ 0.7854202, -.27654359 ]
+# r[2,:,0] = [-0.63220389, -0.54192207]
+
+
+time_steps = np.arange(n)
+
+
+x5 = r[5, 0, :]
+y5 = r[5, 1, :]
+pad = 0.1
+xmin, xmax = x5.min(), x5.max()
+ymin, ymax = y5.min(), y5.max()
+xr = xmax - xmin if xmax > xmin else 1.0
+yr = ymax - ymin if ymax > ymin else 1.0
+
+
+
 plt.figure()
-plt.scatter(r[5,0,0], r[5,1,0])
-plt.figure
-plt.xlim(-2,2)
-plt.ylim(-2,2)
-plt.plot(r[5,0,:], r[5,1,:] )
-
-
-plt.figure()
-plt.figure(figsize=(8, 8))
-for i in range(N):
-   plt.scatter(r[i, 0, 0],r[i, 1, 0],  s=50, label='Start')
-
-for i in range(N):
-   plt.plot(r[i, 0, :], r[i, 1, :]  , label='Particle' + str(i), alpha=0.7)
-
-
- 
-
-plt.xlim(-10, 10)
-plt.ylim(-10, 10)
-plt.xlabel("X-coordinate")
-plt.ylabel("Y-coordinate")
-plt.title("Particle Trajectories Over Time")
+plt.plot(time_steps, x5, linewidth=1.2, label="X(t)")
+plt.xlabel("Time steps")
+plt.ylabel("X-coordinate")
+plt.title("Perturbation behavior of X coordinate up close")
 plt.grid(True)
 plt.legend()
-plt.show()
+
+plt.figure()
+plt.plot(time_steps, y5, linewidth=1.2, label="Y(t)")
+plt.xlabel("Time steps")
+plt.ylabel("Y-coordinate")
+plt.title("Perturbation behavior of Y coordinate up close")
+plt.grid(True)
+plt.legend()
 
 
+plt.figure()
+plt.plot(x5, y5, linewidth=1.2, label="Particle 5 trajectory")
+plt.scatter(x5[0], y5[0], s=40, label="Start", zorder=3)
+plt.xlim(xmin - pad*xr, xmax + pad*xr)
+plt.ylim(ymin - pad*yr, ymax + pad*yr)
+plt.xlabel("X-coordinate")
+plt.ylabel("Y-coordinate")
+plt.title("Perturbed motion of a electron in lattice")
+plt.grid(True)
+plt.legend()
 
 
+plt.figure(figsize=(8, 8))
+for i in range(N):
+    plt.scatter(r[i, 0, 0], r[i, 1, 0], s=50,)
+for i in range(N):
+    plt.plot(r[i, 0, :], r[i, 1, :], alpha=0.7)
+plt.xlim(-5, 5)
+plt.ylim(-5, 5)
+plt.xlabel("X-coordinate")
+plt.ylabel("Y-coordinate")
+plt.title("Wigner Crystal of " + str(N) + " particles in Langevin heat bath")
+plt.grid(True)
+plt.legend(ncol=2, fontsize=8)
 
+print(np.var(r[6,:,:]))
+print(np.var(r[24,:,:]))
+print(np.var(r[20,:,:]))
+U_r = (np.var(r[6,:,:]) + np.var(r[24,:,:]) + np.var(r[20,:,:])) / 3.0
+print(U_r)
 
 plt.show()
