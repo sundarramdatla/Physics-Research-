@@ -47,15 +47,15 @@ for i in range(0, n-1):
     E[i] = Energy(v_1_half[i+1], v_2_half[i+1], x_1[i+1], x_2[i+1])
 
 
-plt.plot(x_1, label='x_1', color='blue')  
-plt.plot(x_2, label='x_2', color='red')
-plt.plot(E, label = "E", color = 'green')   
+plt.plot(x_1, label='Mass 1', color='blue')  
+plt.plot(x_2, label='Mass 2', color='red')
+plt.plot(E, label = "Energy (constant)", color = 'green')   
 
 
 plt.xlabel('Time Step')
 plt.ylabel('Position')
-plt.title('Position of Masses over Time')
+plt.title('Position of Coupled Masses over Time')
 plt.legend()
 
-# Show the plot
+
 plt.show()
