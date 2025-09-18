@@ -25,13 +25,20 @@ options = odeset('RelTol', 1e-6, 'AbsTol', 1e-6, 'MaxStep', .1);
 [t, u] = ode45(@(t,u) my_pde(t, u, G, Lx, Ly, Nx, Ny), t, u0, options);
 
 for i = 1:length(t)
-    u_snapshot = reshape(u(i,:), Nx, Ny);   
+    u_snapshot = reshape(u(i,:), Nx, Ny);
+
+    figure(1); clf
     surf(X, Y, u_snapshot, 'EdgeColor', 'none');
-    xlabel('x'); ylabel('y'); zlabel('u(x,y,t)');
-    title(['Time t = ', num2str(t(i))]);
-    zlim([0 1]);
-    view(2); 
-    colorbar
+    view(2);                         
+    axis([0 Lx 0 Ly]); axis equal tight
+    colormap hot                     
+    c = colorbar;
+    c.Label.String = 'Temperature,  T(x,y,t)';
+    c.Label.FontWeight = 'bold';
+
+    xlabel('x'); ylabel('y');
+    title(sprintf('Temperature distribution T(x,y,t)   at   t = %.3f', t(i)));
+    clim([0 1]);                     
     drawnow;
 end
 
