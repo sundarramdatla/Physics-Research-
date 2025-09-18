@@ -131,18 +131,24 @@ splot = [splot;results_s];
 
 end
 
+
 figure
 comet3(splot(:,1), splot(:,3), splot(:,5))
+title('3D Trajectory of Sports Ball')
+xlabel('X'); ylabel('Y'); zlabel('Z')
+grid on; axis vis3d
 
 figure
 comet(splot(:,1), splot(:,5))
-title('Ping pong ball in 3D Space')
-
-
-ylabel('y')
-xlabel('x')
-zlabel('z')
+title('X-Z Axis Graph')
+xlabel('X'); ylabel('Z')
 grid on
+
+figure
+plot(splot(:,1), splot(:,3))
+title('Top Down View (X-Y Coordinates)')
+xlabel('X'); ylabel('Y')
+axis equal; grid on
 
 figure
 title('Top Down View of Trajectory')
