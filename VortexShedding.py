@@ -228,7 +228,7 @@ def main():
 
 
 
-    # Plot
+    
     plt.figure()
     plt.plot(tu, sigu); plt.xlabel("Time (s)"); plt.ylabel("Signal"); plt.title("Uniform 2 Hz resample")
 
